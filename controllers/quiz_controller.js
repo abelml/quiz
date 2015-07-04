@@ -21,7 +21,12 @@ exports.load = function (req, res, next, quizId) {
 // GET /quizes
 exports.index = function (req, res) {
 	var route = path.join(dirname, 'views/quizes/index');
-	models.Quiz.findAll().then(function (quizes) {
+	var params = {};
+	if (req.query.search) {
+		var textToFind = '%' + req.query.search.replace(/\s+/g, '%') + '%'
+		params.where = ["pregunta like ?", textToFind];
+	}
+	models.Quiz.findAll(params).then(function (quizes) {
 		res.render(route, {quizes: quizes});
 	}).catch(function (error) {
 		next(error);
