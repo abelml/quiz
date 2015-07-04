@@ -3,19 +3,40 @@ var models = require('../models/models.js');
 
 var dirname = path.resolve(path.dirname());
 
-// GET /quizes/question/
-exports.question = function (req, res) {
-	var route = path.join(dirname, 'views/quizes/question');
-	models.Quiz.findAll().success(function (quiz) {
-		res.render(route, {pregunta: quiz[0].pregunta});
+// Autoload
+exports.load = function (req, res, next, quizId) {
+	var route = path.join(dirname, 'views/quizes/index');
+	models.Quiz.find(quizId).then(function (quiz) {
+		if (quiz) {
+			req.quiz = quiz;
+			next();
+		} else {
+			next(new Error('No existe quizId=' + quizId));
+		}
+	}).catch(function (error) {
+		next(error);
 	});
+};
+
+// GET /quizes
+exports.index = function (req, res) {
+	var route = path.join(dirname, 'views/quizes/index');
+	models.Quiz.findAll().then(function (quizes) {
+		res.render(route, {quizes: quizes});
+	}).catch(function (error) {
+		next(error);
+	});
+};
+
+// GET /quizes/question/
+exports.show = function (req, res) {
+	var route = path.join(dirname, 'views/quizes/show');
+	res.render(route, {quiz: req.quiz});
 };
 
 // GET /quizes/answer/
 exports.answer = function (req, res) {
 	var route = path.join(dirname, 'views/quizes/answer');
-	models.Quiz.findAll().success(function (quiz) {
-		var result = req.query.respuesta === quiz[0].respuesta ? 'Correcto' : 'Incorrecto';
-		res.render(route, {respuesta: result});
-	});
+	var result = req.query.respuesta === req.quiz.respuesta ? 'Correcto' : 'Incorrecto';
+	res.render(route, {quiz: req.quiz, result: result});
 };
