@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var quizController = require('../controllers/quiz_controller.js');
+var quizController = require('../controllers/quizController.js');
 
 // GET home page
 router.get('/', function(req, res) {
-	res.render('index', { title: 'Quiz' });
+	res.render('index', {title: 'Quiz', errors: []});
 });
 
 router.param('quizId', quizController.load);
@@ -15,7 +15,7 @@ router.get('/quizes/:quizId(\\d+)', quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 router.get('/quizes/new', quizController.new);
 router.get('/author', function (req, res) {
-	res.render('author', {author: 'Abel Martos López'});
+	res.render('author', {author: 'Abel Martos López', errors: []});
 });
 
 router.post('/quizes/create', quizController.create);
