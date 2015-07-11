@@ -76,6 +76,15 @@ exports.update = function (req, res) {
 	saveQuestion(req.quiz, 'views/quizes/edit', res);
 };
 
+// DELETE /quizes/:id
+exports.destroy = function (req, res) {
+	req.quiz.destroy().then(function () {
+		res.redirect('/quizes');
+	}).catch(function (err) {
+		next(err);
+	});
+};
+
 var saveQuestion = function (quiz, myRoute, res) {
 	var route = path.join(dirname, myRoute);
 	var err = quiz.validate();
