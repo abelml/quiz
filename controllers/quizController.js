@@ -51,7 +51,8 @@ exports.new = function (req, res) {
 	var route = path.join(dirname, 'views/quizes/new');
 	var quiz = models.Quiz.build({
 		pregunta: 'Pregunta',
-		respuesta: 'Respuesta'	
+		respuesta: 'Respuesta',
+		tema: 'Otro'
 	});
 	res.render(route, {quiz: quiz, errors: []});
 };
@@ -73,6 +74,7 @@ exports.edit = function (req, res) {
 exports.update = function (req, res) {
 	req.quiz.pregunta = req.body.quiz.pregunta;
 	req.quiz.respuesta = req.body.quiz.respuesta;
+	req.quiz.tema = req.body.quiz.tema;
 	saveQuestion(req.quiz, 'views/quizes/edit', res);
 };
 
@@ -95,7 +97,7 @@ var saveQuestion = function (quiz, myRoute, res) {
 		}
 		res.render(route, {quiz: quiz, errors: errors});
 	} else {
-		quiz.save({fields: ['pregunta', 'respuesta']}).then(function () {
+		quiz.save({fields: ['pregunta', 'respuesta', 'tema']}).then(function () {
 			res.redirect('/quizes');
 		});
 	}
