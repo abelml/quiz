@@ -45,3 +45,22 @@ exports.answer = function (req, res) {
 	var result = req.query.respuesta === req.quiz.respuesta ? 'Correcto' : 'Incorrecto';
 	res.render(route, {quiz: req.quiz, result: result});
 };
+
+// GET /quizes/new
+exports.new = function (req, res) {
+	var route = path.join(dirname, 'views/quizes/new');
+	var quiz = models.Quiz.build({
+		pregunta: "Pregunta",
+		respuesta: "Respuesta"	
+	});
+	res.render(route, {quiz: quiz});
+};
+
+// POST /quizes/create
+exports.create = function (req, res) {
+	var quiz = models.Quiz.build(req.body.quiz);
+
+	quiz.save({fields: ['pregunta', 'respuesta']}).then(function () {
+		res.redirect('/quizes');
+	});
+};
