@@ -59,10 +59,27 @@ exports.new = function (req, res) {
 // POST /quizes/create
 exports.create = function (req, res) {
 	var quiz = models.Quiz.build(req.body.quiz);
+	saveQuestion(quiz, 'views/quizes/new', res);
+};
 
+// GET /quizes/:id/edit
+exports.edit = function (req, res) {
+	var route = path.join(dirname, 'views/quizes/edit');
+	var quiz = req.quiz;
+	res.render(route, {quiz: quiz, errors: []});
+};
+
+// PUT /quizes/:id
+exports.update = function (req, res) {
+	req.quiz.pregunta = req.body.quiz.pregunta;
+	req.quiz.respuesta = req.body.quiz.respuesta;
+	saveQuestion(req.quiz, 'views/quizes/edit', res);
+};
+
+var saveQuestion = function (quiz, myRoute, res) {
+	var route = path.join(dirname, myRoute);
 	var err = quiz.validate();
 	if (err) {
-		var route = path.join(dirname, 'views/quizes/new');
 		var errors = [];
 		for (var prop in err) {
 			errors.push({message: err[prop]});
@@ -73,4 +90,4 @@ exports.create = function (req, res) {
 			res.redirect('/quizes');
 		});
 	}
-};
+}
