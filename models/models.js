@@ -24,9 +24,14 @@ var sequelize = new Sequelize(DB_name, user, pwd, {
 });
 
 var dirname = path.resolve(path.dirname());
-var Quiz = sequelize.import(path.join(dirname, 'models/quiz'));
+var Quiz = sequelize.import(path.join(dirname, 'models/quiz.js'));
+var Comment = sequelize.import(path.join(dirname, 'models/comment.js'));
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
 
 exports.Quiz = Quiz;
+exports.Comment = Comment;
 
 sequelize.sync().then(function () {
 	Quiz.count().then(function (count) {

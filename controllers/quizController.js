@@ -6,7 +6,15 @@ var dirname = path.resolve(path.dirname());
 // Autoload
 exports.load = function (req, res, next, quizId) {
 	var route = path.join(dirname, 'views/quizes/index');
-	models.Quiz.find(quizId).then(function (quiz) {
+	var clause = {
+		where: {
+			id: Number(quizId)
+		},
+		include: [{
+			model: models.Comment
+		}]
+	};
+	models.Quiz.find(clause).then(function (quiz) {
 		if (quiz) {
 			req.quiz = quiz;
 			next();
