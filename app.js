@@ -31,16 +31,28 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 
-// catch 404 and forward to error handler
+// error handlers
 app.use(function (req, res, next) {
+
 	if (!req.path.match(/\/login|\/logout/)) {
 		req.session.redir = req.path;
 	}
+	var now = new Date();
+	var lastTime = new Date(req.session.lastTime);
+	req.session.lastTime = now.toString();
+
+	var seconds = (now.getTime() - lastTime.getTime()) / 1000;
+	if (seconds > 120) {
+		delete req.session.user;
+		if (!req.session.errors) {
+			req.session.errors = [];
+		}
+		req.session.errors.push('Sesión caducada');
+	}
+
 	res.locals.session = req.session;
 	next();
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
