@@ -7,7 +7,7 @@ var dirname = path.resolve(path.dirname());
 exports.load = function (req, res, next, commentId) {
 	var clause = {
 		where: {
-			id: Number(quizId)
+			id: Number(commentId)
 		}
 	};
 	models.Comment.find(clause).then(function (comment) {
@@ -15,7 +15,7 @@ exports.load = function (req, res, next, commentId) {
 			req.comment = comment;
 			next();
 		} else {
-			next(new Error('No existe commentId=' + quizId));
+			next(new Error('No existe commentId=' + commentId));
 		}
 	}).catch(function (error) {
 		next(error);

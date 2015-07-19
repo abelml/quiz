@@ -15,8 +15,8 @@
 <% for (index in quiz.comments) { %>
 	<% if (quiz.comments[index].publicado || session.user) { %>
 	<p>- <%= quiz.comments[index].selectedValues.texto %>
-		<% if (quiz.comments[index].publicado && session.user) { %>
-			<a href="/quizes/<%= quiz.id %>/comments/<% quiz.comments[index].id %>/publish">
+		<% if (session.user && !quiz.comments[index].publicado) { %>
+			<a href="/quizes/<%= quiz.id %>/comments/<%= quiz.comments[index].id %>/publish">
 				<button>Publicar</button>
 			</a>
 		<% } %>
