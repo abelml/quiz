@@ -31,7 +31,6 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 
-// error handlers
 app.use(function (req, res, next) {
 
 	if (!req.path.match(/\/login|\/logout/)) {
@@ -47,12 +46,14 @@ app.use(function (req, res, next) {
 		if (!req.session.errors) {
 			req.session.errors = [];
 		}
-		req.session.errors.push('Sesión caducada');
+		req.session.errors.push({message: 'Sesión caducada'});
 	}
 
 	res.locals.session = req.session;
 	next();
 });
+
+// error handlers
 
 // development error handler
 // will print stacktrace
