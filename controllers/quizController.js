@@ -5,7 +5,7 @@ var dirname = path.resolve(path.dirname());
 
 // Autoload
 exports.load = function (req, res, next, quizId) {
-	var route = path.join(dirname, 'views/quizes/index');
+	var route = path.join(dirname, 'views/quizes/index.js');
 	var clause = {
 		where: {
 			id: Number(quizId)
@@ -28,7 +28,7 @@ exports.load = function (req, res, next, quizId) {
 
 // GET /quizes
 exports.index = function (req, res) {
-	var route = path.join(dirname, 'views/quizes/index');
+	var route = path.join(dirname, 'views/quizes/index.js');
 	var params = {};
 	if (req.query.search) {
 		var textToFind = '%' + req.query.search.replace(/\s+/g, '%') + '%'
@@ -43,7 +43,7 @@ exports.index = function (req, res) {
 
 // GET /quizes/question/
 exports.show = function (req, res) {
-	var route = path.join(dirname, 'views/quizes/show');
+	var route = path.join(dirname, 'views/quizes/show.js');
 	res.render(route, {quiz: req.quiz, errors: []});
 };
 
