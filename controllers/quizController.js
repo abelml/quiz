@@ -5,7 +5,6 @@ var dirname = path.resolve(path.dirname());
 
 // Autoload
 exports.load = function (req, res, next, quizId) {
-	var route = path.join(dirname, 'views/quizes/index.ejs');
 	var clause = {
 		where: {
 			id: Number(quizId)
