@@ -35,20 +35,18 @@ exports.create = function (req, res) {
 		texto: req.body.comment.texto,
 		QuizId: req.params.quizId
 	});
-	var route = path.join(dirname, '/quizes/comments/new.ejs');
-	var err = comment.validate();
-
-	if (err) {
+	var route = path.join(dirname, '/views/comments/new.ejs');
+	comment.validate().then(function () {
+		comment.save().then(function () {
+			res.redirect('/quizes/' + req.params.quizId);
+		});
+	}).catch(function (err) {
 		var errors = [];
 		for (var prop in err) {
 			errors.push({message: err[prop]});
 		}
 		res.render(route, {comment: comment, errors: errors});
-	} else {
-		comment.save().then(function () {
-			res.redirect('/quizes/' + req.params.quizId);
-		});
-	}
+	});
 };
 
 // GET /quizes/:quizId/comments/:commentId/publish
