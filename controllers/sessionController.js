@@ -23,14 +23,14 @@ exports.create = function (req, res) {
 			return;
 		}
 		req.session.user = {id: user.id, username: user.username};
-		res.redirect(req.session.redir.toString());
+		res.redirect(req.session.redir);
 	});
 };
 
 // GET /logout
 exports.destroy = function (req, res) {
 	delete req.session.user;
-	res.redirect(req.session.redir.toString());
+	res.redirect(req.session.redir);
 };
 
 exports.loginRequired = function (req, res, next) {
